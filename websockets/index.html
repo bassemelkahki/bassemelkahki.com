@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+	<title>Websockets Test</title>
+	
+
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js?ver=3.4.2"></script>
+	<script type="text/javascript">
+	$(function() {
+		$('.useWhileOnline').attr('disabled','true');
+		$('.useWhileOffline').removeAttr('disabled');
+	if( 'WebSocket' in window ) {
+	var websocket = new WebSocket
+( 'ws://bassemelkahki.com/websockets' );
+	websocket.addEventListener('open', onOpen, false );
+	websocket.addEventListener('close', onClose, false );
+	websocket.addEventListener('message', onMessage, false );
+	websocket.addEventListener('error', onError, false );
+}
+else {
+	alert("Oops! Websockets aren't supported by your browser!");
+}
+
+function logMessage(message){ 
+$('output#log').append('<li>'+message).scrollTop(9e9);
+}
+
+function onOpen() { 
+	$('.useWhileOnline').removeAttr('disabled');
+	$('.useWhileOffline').attr('disabled','true');
+	logMessage('Connected');
+}
+
+function onClose() {
+	$('.useWhileOnline').attr('disabled','true');
+	$('.useWhileOffline').removeAttr('disabled');
+	logMessage('Disconnected');
+}
+
+function onMessage(event) {
+	logMessage('Received: ' +event.data);
+}
+
+function onError(event) { 
+	logMessage('Error: ' + event.data);
+}
+
+$('button#send').click(function(){
+	var message = $('input#message').val();
+	websocket.send( message );
+	logMessage('Sent: ' +message);
+});
+
+});
+</script>
+
+</head>
+<body>
+
+
+<input class="useWhileOnline" type="text" id="message">
+<button class="useWhileOnline" id="send">Send</button>
+<output id="log"></output>
+</body>
+</html>
